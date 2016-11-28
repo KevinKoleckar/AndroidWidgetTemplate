@@ -20,7 +20,7 @@
     
     <#if background != "assets/background.png">
         <copy from="${background}"
-                to="src/main/res/drawable-xxhdpi/background.png"/>
+                to="src/main/res/mipmap-xxhdpi/background/background.png"/>
     </#if>
         
     <instantiate from="src/app_package/EnglishNumberToWords.java.ftl"
