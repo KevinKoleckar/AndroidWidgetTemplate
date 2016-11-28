@@ -18,7 +18,6 @@
         android:textColor="#ffffff"
         android:layout_marginTop="30dp"
         <#if background == "assets/background.png">
-        android:visibility="GONE"
         </#if>
         />
 
@@ -38,7 +37,6 @@
         android:text="freakin"
         android:editable="true"
         android:background="@android:color/darker_gray"
-        android:visibility="GONE"
         android:layout_marginTop="30dp" />
     <RadioGroup
         android:layout_width="fill_parent"
