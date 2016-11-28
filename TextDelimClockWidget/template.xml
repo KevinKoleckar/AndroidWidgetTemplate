@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<template
+    format="3"
+    revision="4"
+    name="Text D Clock Widget"
+    minApi="7"
+    minBuildApi="14"
+    description="Creates a new blank activity, with an action bar and optional navigational elements such as tabs or horizontal swipe.">
+    
+    <category value="Activity"/>
+    <formfactor value="Mobile"/>
+
+<!--    <parameter
+        id="fragmentLayoutName"
+        name="Fragment Layout Name"
+        type="string"
+        constraints="layout|unique|nonempty"
+        suggest="fragment_${classToResource(activityClass)}"
+        default="fragment_main"
+        help="The name of the layout to create for the activity's content fragment"
+        visibility="features != 'none'" />-->
+
+    <parameter
+        id="delimeterString"
+        name="Delimeter String"
+        type="string"
+        constraints="unique|nonempty"
+        default=":"
+        help="What should appear between hours and minutes"/>
+    <parameter
+        id="disp"
+        name="Display"
+        type="enum"
+        default="text"
+        help="Display time in 'text' or 'numbers'">
+        <option id="text">One Seventeen</option>
+        <option id="numbers">01:17</option>
+    </parameter>
+
+    <parameter
+        id="isLauncher"
+        name="Launcher Activity"
+        type="boolean"
+        default="false"
+        help="If true, this activity will have a CATEGORY_LAUNCHER intent filter, making it visible in the launcher" />
+
+    <parameter
+        id="font"
+        name="Font File"
+        type="string"
+        default="assets/myFont.ttf"
+        help="Where is the font you want"></parameter>
+    
+    <parameter
+        id="background"
+        name="Background File"
+        type="string"
+        default="assets/background.png"
+        help="Where is the background image you want"
+        visibility="features != 'none'"></parameter>
+
+    <parameter
+        id="packageName"
+        name="Package name"
+        type="string"
+        constraints="package"
+        default="com.mycompany.myapp" />
+    
+    <parameter
+        id="features"
+        name="Additional Features"
+        type="enum"
+        default="none"
+        help="Additional features to include, such as a fragment, swipe views, or a navigation drawer" >
+        <option id="none">None</option>
+        <option id="background">Include Background Image</option>
+        <option id="pager">Swipe Views (ViewPager)</option>
+        <option id="drawer">Navigation Drawer</option>
+        <option id="tabs">Action Bar Tabs (with ViewPager)</option>
+        <option id="spinner">Action Bar Spinner</option>
+    </parameter>
+
+    <!-- 128x128 thumbnails relative to template.xml -->
+    <thumbs>
+        <!-- default thumbnail is required -->
+        <thumb>template_blank_activity.png</thumb>
+        <!-- attributes act as selectors based on chosen parameters -->
+        <thumb features="none">template_blank_activity.png</thumb>
+        <thumb features="background">template_blank_activity_fragment.png</thumb>
+        <thumb features="tabs">template_blank_activity_tabs.png</thumb>
+        <thumb features="pager">template_blank_activity_pager.png</thumb>
+        <thumb features="spinner">template_blank_activity_dropdown.png</thumb>
+        <thumb features="drawer">template_blank_activity_drawer.png</thumb>
+    </thumbs>
+
+    <globals file="globals.xml.ftl" />
+    <execute file="recipe.xml.ftl" />
+
+</template>
