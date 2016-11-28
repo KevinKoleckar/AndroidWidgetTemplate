@@ -16,11 +16,11 @@
             to="${escapeXmlAttribute(resOut)}/layout/widget_main.xml" />
     
     <copy from="${font}"
-            to="src/main/assets/myFont.ttf"/>
+            to="${escapeXmlAttribute(manifestOut)}/assets/myFont.ttf"/>
     
     <#if background != "assets/background.png">
         <copy from="${background}"
-                to="src/main/res/mipmap-xxhdpi/background/background.png"/>
+                to="${escapeXmlAttribute(manifestOut)}/res/mipmap-xxhdpi/background.png"/>
     </#if>
         
     <instantiate from="src/app_package/EnglishNumberToWords.java.ftl"
