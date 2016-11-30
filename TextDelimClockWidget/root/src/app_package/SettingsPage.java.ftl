@@ -61,7 +61,7 @@ public class SettingsPage extends Activity implements View.OnClickListener{
         remoteViews.setImageViewBitmap(R.id.imageView_txt, bmp);
 <#if background != "assets/background.png">
         if(includeBackground){
-            remoteViews.setImageViewResource(R.id.imageView_bg, R.drawable.background);
+            remoteViews.setImageViewResource(R.id.imageView_bg, R.mipmap.background);
         }
 </#if>
         AppWidgetManager appWidgetManager = AppWidgetManager
