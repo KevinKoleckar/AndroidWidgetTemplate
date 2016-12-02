@@ -5,13 +5,11 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name">
         <activity
             android:name="${packageName}.SettingsPage"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo.Dialog" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

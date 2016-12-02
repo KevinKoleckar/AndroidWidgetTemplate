@@ -21,7 +21,8 @@ public class SettingsPage extends Activity implements View.OnClickListener{
     int thisWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     EditText delime;
     RadioGroup radiogroup;
-    
+    EditText fontSize;
+    TextView delimeLabel;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +31,9 @@ public class SettingsPage extends Activity implements View.OnClickListener{
         getIdOfCurrentWidget(savedInstanceState);
         ((Button) findViewById(R.id.create_widget)).setOnClickListener(this);
         ((Switch) findViewById(R.id.delim)).setOnClickListener(this);
+        delimeLabel = ((TextView) findViewById(R.id.delimLabel));
         delime = (EditText) findViewById(R.id.delimText);
-    }
+        fontSize = (EditText) findViewById(R.id.fontSize);    }
     /**
      * Get the Id of Current Widget from the intent from the Widget or if it is
      * <span id="IL_AD9" class="IL_AD">the first time</span>
@@ -52,12 +54,12 @@ public class SettingsPage extends Activity implements View.OnClickListener{
      * @param widgetId
      *            - the ID of current widget to be created
      */
-    public void updateWidget(int widgetId, boolean includeBackground, String delim, String color) {
+    public void updateWidget(int widgetId, boolean includeBackground, String delim, String color, String size) {
         RemoteViews remoteViews = new RemoteViews(getPackageName(),
                 R.layout.widget_main);
 
         MyTimer myTimer = new MyTimer(this);
-        Bitmap bmp = myTimer.buildUpdate(myTimer.getTodaysTime(delim), color);
+        Bitmap bmp = myTimer.buildUpdate(myTimer.getTodaysTime(delim), color, size);
         remoteViews.setImageViewBitmap(R.id.imageView_txt, bmp);
 <#if background != "assets/background.png">
         if(includeBackground){
@@ -70,11 +72,11 @@ public class SettingsPage extends Activity implements View.OnClickListener{
         appWidgetManager.updateAppWidget(widgetId, remoteViews);
     }
 
-    public void setResultDataToWidget(int result, int widgetId, boolean includeBackground, String delim, String color) {
+    public void setResultDataToWidget(int result, int widgetId, boolean includeBackground, String delim, String color, String size) {
         System.out.println("WID ID = " + widgetId);
 
         // update the widget on creation
-        updateWidget(widgetId, includeBackground, delim, color);
+        updateWidget(widgetId, includeBackground, delim, color, size);
 
         // set the result back to widget
         Intent resultValue = new Intent();
@@ -85,25 +87,6 @@ public class SettingsPage extends Activity implements View.OnClickListener{
         finish();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.settings_page, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public void onClick(View v) {
@@ -111,6 +94,7 @@ public class SettingsPage extends Activity implements View.OnClickListener{
         Switch background = (Switch) findViewById(R.id.background_checkBox);
         
         String mdelim = delime.getText().toString();
+		String size = fontSize.getText().toString();
         
         radiogroup = (RadioGroup) findViewById(R.id.radiogroup);
         RadioButton selectRadio = (RadioButton) findViewById(radiogroup.getCheckedRadioButtonId());
@@ -119,24 +103,26 @@ public class SettingsPage extends Activity implements View.OnClickListener{
         SharedPreferences.Editor prefs = context.getSharedPreferences("${packageName}.MyAppWidgetProvider", 4).edit();
         prefs.putString("delimeter", mdelim);
         prefs.putString("color", color);
-        prefs.commit();
+        prefs.putString("size", size);
+        prefs.apply();
         
         if (v.getId() == R.id.create_widget) {
             Switch box = (Switch) findViewById(R.id.delim);
             if (box.isChecked()){
-                setResultDataToWidget(Activity.RESULT_OK, thisWidgetId, background.isChecked(), mdelim, color);
+                setResultDataToWidget(Activity.RESULT_OK, thisWidgetId, background.isChecked(), mdelim, color, size);
             }
             else {
-                setResultDataToWidget(Activity.RESULT_OK, thisWidgetId, background.isChecked(), "", color);
+                setResultDataToWidget(Activity.RESULT_OK, thisWidgetId, background.isChecked(), "", color, size);
             }
         }
         if (v.getId() == R.id.delim){
             Switch box = (Switch) findViewById(R.id.delim);
-            if (box.isChecked()){
+            if (box.isChecked()) {
+                delimeLabel.setVisibility(View.VISIBLE);
                 delime.setVisibility(View.VISIBLE);
-            }
-            else{
+            } else {
                 delime.setVisibility(View.GONE);
+                delimeLabel.setVisibility(View.GONE);
             }
         }
     }

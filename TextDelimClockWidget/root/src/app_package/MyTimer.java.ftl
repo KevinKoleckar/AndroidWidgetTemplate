@@ -14,15 +14,15 @@ import android.widget.RemoteViews;
 import java.util.Calendar;
 
 /**
- * Created by test on 5/21/14.
+ * Created by Kevin Koleckar.
  */
-public class MyTimer {
-    RemoteViews remoteViews;
-    Context context;
-    AppWidgetManager appWidgetManager;
-    ComponentName thisWidget;
+class MyTimer {
+    private RemoteViews remoteViews;
+    private Context context;
+    private AppWidgetManager appWidgetManager;
+    private ComponentName thisWidget;
 
-    public MyTimer(Context context) {
+    MyTimer(Context context) {
 
         appWidgetManager = AppWidgetManager.getInstance(context);
 
@@ -34,8 +34,9 @@ public class MyTimer {
         thisWidget = new ComponentName(context, MyAppWidgetProvider.class);
 
     }
-    public static String loadDelimPref(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("${packageName}.MyAppWidgetProvider", 4);
+
+    private static String loadDelimPref(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("com.example.kkoleckar.girlyclock.MyAppWidgetProvider", 4);
         String delim = prefs.getString("delimeter", null);
         if (delim != null) {
             return delim;
@@ -43,9 +44,9 @@ public class MyTimer {
             return context.getString(R.string.delimeter);
         }
     }
-    
-    public static String loadColorPref(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences("${packageName}.MyAppWidgetProvider", 4);
+
+    private static String loadColorPref(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("com.example.kkoleckar.girlyclock.MyAppWidgetProvider", 4);
         String color = prefs.getString("color", null);
         if (color != null) {
             return color;
@@ -53,27 +54,45 @@ public class MyTimer {
             return "BLACK";
         }
     }
-    
-    public synchronized void runAndUpdateTheWidget() {
+    private static String loadSizePref(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("com.example.kkoleckar.girlyclock.MyAppWidgetProvider", 4);
+        String size = prefs.getString("size", null);
+        if (size != null) {
+            return size;
+        } else {
+            return "50";
+        }
+    }
+    private static String pad(int c) {
+        if (c >= 10) {
+            return EnglishNumberToWords.convertThisNumber(c);
+        } else if (c == 0) {
+            return "o'clock";
+        } else {
+            return "o'" + EnglishNumberToWords.convertThisNumber(c);
+        }
+    }
+
+    synchronized void runAndUpdateTheWidget() {
         String delim = loadDelimPref(context);
         String color = loadColorPref(context);
-        
+        String size = loadSizePref(context);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
         for (final int appWidgetId : allWidgetIds) {
 
-            System.out.println("UPDATING......" + getTodaysTime(delim) + " ID = "
+            System.out.println("UPDATING......" + Arrays.toString(getTodaysTime(delim)) + " ID = "
                     + appWidgetId);
 
             remoteViews.setImageViewBitmap(R.id.imageView_txt,
-                    buildUpdate(getTodaysTime(delim), color));
+                    buildUpdate(getTodaysTime(delim), color, size));
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
         }
 
     }
 
-    public Bitmap buildUpdate(String[] time, String color) {
+    Bitmap buildUpdate(String[] time, String color, String textSize) {
         int bmpWidth = 500;//250;
         int bmpHeight = 250;//100;
         Bitmap myBitmap = Bitmap.createBitmap(bmpWidth, bmpHeight, Bitmap.Config.ARGB_8888);
@@ -88,52 +107,44 @@ public class MyTimer {
         paint.setSubpixelText(true);
         paint.setTypeface(clock);
         paint.setStyle(Paint.Style.FILL);
-        
-        if("BLACK".equals(color)){
-          paint.setColor(Color.BLACK);
+
+        switch (color){
+            case "BLACK":
+                paint.setColor(Color.BLACK);
+                break;
+            case "RED":
+                paint.setColor(Color.RED);
+                break;
+            case "WHITE":
+                paint.setColor(Color.WHITE);
+                break;
         }
-        if("RED".equals(color)){
-          paint.setColor(Color.RED);
-        }
-        if("WHITE".equals(color)){
-          paint.setColor(Color.WHITE);
-        }
-        
-        paint.setTextSize(50);
+
+        paint.setTextSize(Integer.parseInt(textSize));
         paint.setTextAlign(Paint.Align.CENTER);
-        myCanvas.drawText(time[0]+time[1], bmpWidth / 2, bmpHeight / 3,
+        myCanvas.drawText(time[0] + time[1], bmpWidth / 2, bmpHeight / 3,
                 paint);
-        myCanvas.drawText(time[2], bmpWidth / 2, 2*bmpHeight / 3,
+        myCanvas.drawText(time[2], bmpWidth / 2, 2 * bmpHeight / 3,
                 paint);
 
         return myBitmap;
     }
 
-    public String[] getTodaysTime(String delim) {
+    String[] getTodaysTime(String delim) {
         final Calendar c = Calendar.getInstance();
         int hour = convertToNormal(c.get(Calendar.HOUR_OF_DAY));
         int minute = c.get(Calendar.MINUTE);
         //int seconds = c.get(Calendar.SECOND);
-        String hours=EnglishNumberToWords.convertThisNumber(hour);
-        String mins=pad(minute);
-        String[] time={
-                hours+" ",
+        String hours = EnglishNumberToWords.convertThisNumber(hour);
+        String mins = pad(minute);
+        return new String[]{
+                hours + " ",
                 delim,
                 mins
         };
-        return time;
     }
 
-    private static String pad(int c) {
-        if (c >= 10){
-            return EnglishNumberToWords.convertThisNumber(c);}
-        else if(c==0){
-            return "o'clock";}
-        else{
-            return "o'" + EnglishNumberToWords.convertThisNumber(c);}
-    }
-
-    public int convertToNormal(int hour) {
+    private int convertToNormal(int hour) {
         if (hour > 12) {
             hour = hour - 12;
         }
