@@ -14,10 +14,7 @@
         android:contentDescription="@mipmap/ic_launcher"
         android:scaleType="fitCenter"
         />
-    <!--TODO add background-->
-    <!--add background.png files to res/reawable-XXXX dirs-->
-    <!--apply following line to above ImageView-->
-    <!--android:src="@mipmap/background"-->
+
     <ImageView
         android:id="@+id/imageView_txt"
         android:layout_width="fill_parent"

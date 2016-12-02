@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.widget.RemoteViews;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 /**

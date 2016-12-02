@@ -8,6 +8,6 @@
     android:initialLayout="@layout/widget_main"
     android:widgetCategory="keyguard|home_screen"
     android:layout_width="match_parent" android:layout_height="match_parent"
-	android:previewImage="@mipmap/background">
+	android:previewImage="@mipmap/background"
     >
 </appwidget-provider>

@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.RemoteViews;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+
 
 
 public class SettingsPage extends Activity implements View.OnClickListener{
@@ -120,9 +122,11 @@ public class SettingsPage extends Activity implements View.OnClickListener{
             if (box.isChecked()) {
                 delimeLabel.setVisibility(View.VISIBLE);
                 delime.setVisibility(View.VISIBLE);
+                delime.setText(R.string.defaultDelimeter);
             } else {
                 delime.setVisibility(View.GONE);
                 delimeLabel.setVisibility(View.GONE);
+                delime.setText("");
             }
         }
     }
